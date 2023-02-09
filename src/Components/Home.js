@@ -1,11 +1,35 @@
-import React from 'react'
+import React ,{useEffect} from 'react'
 import styled from 'styled-components'
 import ImgSlider from './ImgSlider'
 import Viewers from './Viewers'
 import Movies from './Movies'
 import Details from './Details'
+import db from "../firebase"
+ import { doc, onSnapshot, collection, query, where, QuerySnapshot } from "firebase/firestore";
+ import { useDispatch , useSelector} from 'react-redux'
+ import { setMovies } from '../features/Movies/MovieSlice'
+//  import { useEffect } from 'react'
+
+// import { setMovies } from '../features/Movies/MovieSlice'
 
 function Home() {
+const dispatch=useDispatch();
+
+
+useEffect(()=>{
+    db.collection("movies").onSnapshot((snapshot) => {
+        let tempMovies = snapshot.docs.map((doc) => {
+            return { id: doc.id, ...doc.data() };
+        });
+
+        console.log(tempMovies);
+        dispatch(
+            setMovies(tempMovies)
+        );
+    })
+}, [])
+ 
+
   return (
     <Container>
       <ImgSlider/>
@@ -13,7 +37,7 @@ function Home() {
   <Movies/  >
 
 
-    </Container>
+  </Container>
   )
 }
 
