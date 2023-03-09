@@ -1,42 +1,70 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
+import { useParams } from 'react-router-dom'
+import db from "../firebase"
+
+
 
 function Details() {
+    const { id } = useParams();
+    const [movie, setMovies] = useState();
+    useEffect(() => {
+        //grab movie info from db
+        db.collection("movies") 
+            .doc(id)
+            .get()
+            .then((doc) => {
+                if (doc.exists) {
+                    //save the move the data;
+                    setMovies(doc.data());
+                }
+                else {
+                    //redirect to home page 
+
+                }
+            })
+    }, [])
+    console.log("movie is ", movie);
     return (
+
         <Container>
-            <Background>
-                <img src='/images/details.png' />
+            {movie && (
+                <>
+                    <Background>
+                        <img src={movie.backgroundImg} />
 
-            </Background>
-            <ImageTitle>
+                    </Background>
+                    <ImageTitle>
+                        <img src={movie.titleImg} />
 
+                    </ImageTitle>
+                    <Controlls>
+                        <Playbtn>
+                            <img src='/images/play-icon-black.png' />
+                            <span>PLAY</span>
+                        </Playbtn>
+                        <Trailerbtn>
+                            <img src='/images/play-icon-white.png' />
+                            <span>Trailor</span>
+                        </Trailerbtn>
+                        <Addbtn>
+                            <span>+</span>
+                        </Addbtn>
+                        <GroupBtn>
+                            <img src='/images/group-icon.png' />
+                        </GroupBtn>
+                    </Controlls>
+                    <Subtitles>
+                        {movie.subTitle};
+                    </Subtitles>
+                    <Discription>
+                        {movie.description};
+                    </Discription>
+                </>
+            )}
 
-            </ImageTitle>
-            <Controlls>
-                <Playbtn>
-                    <img src='/images/play-icon-black.png' />
-                    <span>PLAY</span>
-                </Playbtn>
-                <Trailerbtn>
-                    <img src='/images/play-icon-white.png' />
-                    <span>Trailor</span>
-                </Trailerbtn>
-                <Addbtn>
-                <span>+</span>
-                </Addbtn>
-                <GroupBtn>
-                <img src='/images/group-icon.png'/>
-                </GroupBtn>
-            </Controlls>
-            <Subtitles>
-                2019 . 7m . Family,Fantasy,Kids,Animation
-            </Subtitles>
-            <Discription>
-            A Chinese Canadian woman cooks a meal of baozi for her and her husband. {'\n'}
-             One of her buns comes alive,much to her shock. She raises the steamed bun as a child,
-             feeding and caring for it, as it enjoys the time spent with her.
-            </Discription>
         </Container>
+
     )
 }
 
@@ -146,13 +174,13 @@ span{
     color:white;
 }
 `
-const Subtitles=styled.div`
+const Subtitles = styled.div`
 color :rgb(249,249,249);
 font-size;
 min-height:20px;
 margin-top:26px;
 `
-const Discription=styled.div`
+const Discription = styled.div`
 line-height:1.4;
 font-size:20px;
 margin-top:16px;

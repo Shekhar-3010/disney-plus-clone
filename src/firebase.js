@@ -1,10 +1,17 @@
 // Import the functions you need from the SDKs you need
+import firebase from "firebase/compat/app";
+import "firebase/storage";
+import "firebase/compat/auth";
+import "firebase/compat/firestore";
+import "firebase/compat/auth";
+import "firebase/compat/firestore";
 import { initializeApp } from "firebase/app";
-import { getStorage } from "firebase/storage";
-import { getAuth, googleAuthProvider } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 import { GoogleAuthProvider } from "firebase/auth";
-import { getFirestore } from "firebase/firestore"
-
+import { getStorage } from "firebase/storage";
+// Add Firebase storage
+import "firebase/compat/storage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCV-rjDQ6GUD_Bs9ikT4A6De4Qll9ssl2o",
@@ -15,11 +22,11 @@ const firebaseConfig = {
   appId: "1:816945883573:web:d8d80151c8d773976911fc",
   measurementId: "G-RTL2233F1S"
 };
-const firebaseApp = initializeApp(firebaseConfig);
-const db = getFirestore();
-const storage = getStorage(firebaseApp);
-const auth = getAuth();
-const provider = new GoogleAuthProvider(); // add the social login of google (that little popuptells you to pick up which email you wanna log in with)
+const firebaseApp = firebase.initializeApp(firebaseConfig);
+const db = firebaseApp.firestore();
+const auth = firebase.auth();
 
-export {auth, provider, storage};
+const provider = new firebase.auth.GoogleAuthProvider();
+const storage = firebase.storage().ref;
+export { auth, provider, storage };
 export default db;

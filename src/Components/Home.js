@@ -8,37 +8,34 @@ import db from "../firebase"
  import { doc, onSnapshot, collection, query, where, QuerySnapshot } from "firebase/firestore";
  import { useDispatch , useSelector} from 'react-redux'
  import { setMovies } from '../features/Movies/MovieSlice'
-//  import { useEffect } from 'react'
 
-// import { setMovies } from '../features/Movies/MovieSlice'
+
+
 
 function Home() {
 const dispatch=useDispatch();
 
-
 useEffect(()=>{
     db.collection("movies").onSnapshot((snapshot) => {
+      // console.log(snapshot)
         let tempMovies = snapshot.docs.map((doc) => {
+            
             return { id: doc.id, ...doc.data() };
         });
 
-        console.log(tempMovies);
-        dispatch(
-            setMovies(tempMovies)
-        );
-    })
-}, [])
+        // console.log(tempMovies);
+        dispatch(setMovies(tempMovies));
+    });
+}, []);
  
 
   return (
     <Container>
-      <ImgSlider/>
-      <Viewers/>
-  <Movies/  >
-
-
+    <ImgSlider />
+    <Viewers />
+    <Movies />
   </Container>
-  )
+  );
 }
 
 export default Home
